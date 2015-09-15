@@ -9,11 +9,11 @@ func assertIntEq(t *testing.T, expected int, actual int) {
 }
 
 func TestCreateNode(t *testing.T) {
-	fn := func(in map[string]interface{}, params map[string]interface{}) map[string]interface{} {
+	fn := func(in DataMap, params DataMap) DataMap {
 		i1 := in["in1"].(int)
 		i2 := in["in2"].(int)
 
-		return map[string]interface{}{
+		return DataMap{
 			"out1": i1 + i2,
 			"out2": i1 - i2,
 		}
@@ -34,21 +34,21 @@ func TestCreateNode(t *testing.T) {
 
 func TestMultipleNodes(t *testing.T) {
 
-	fn1 := func(in map[string]interface{}, params map[string]interface{}) map[string]interface{} {
+	fn1 := func(in DataMap, params DataMap) DataMap {
 		i1 := in["in1"].(int)
 		i2 := in["in2"].(int)
 
-		return map[string]interface{}{
+		return DataMap{
 			"out1": i1 + i2,
 			"out2": i1 - i2,
 		}
 	}
 
-	fn2 := func(in map[string]interface{}, params map[string]interface{}) map[string]interface{} {
+	fn2 := func(in DataMap, params DataMap) DataMap {
 		i1 := in["in1"].(int)
 		i2 := in["in2"].(int)
 
-		return map[string]interface{}{
+		return DataMap{
 			"out": i1 - i2,
 		}
 	}
@@ -80,21 +80,21 @@ func TestMultipleNodes(t *testing.T) {
 
 func TestMultipleNodesSetInputs(t *testing.T) {
 
-	fn1 := func(in map[string]interface{}, params map[string]interface{}) map[string]interface{} {
+	fn1 := func(in DataMap, params DataMap) DataMap {
 		i1 := in["in1"].(int)
 		i2 := in["in2"].(int)
 
-		return map[string]interface{}{
+		return DataMap{
 			"out1": i1 + i2,
 			"out2": i1 - i2,
 		}
 	}
 
-	fn2 := func(in map[string]interface{}, params map[string]interface{}) map[string]interface{} {
+	fn2 := func(in DataMap, params DataMap) DataMap {
 		i1 := in["in1"].(int)
 		i2 := in["in2"].(int)
 
-		return map[string]interface{}{
+		return DataMap{
 			"out": i1 - i2,
 		}
 	}

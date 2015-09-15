@@ -2,6 +2,8 @@ package graph
 
 import "time"
 
+type DataMap map[string]interface{}
+
 /*
 Function specified by user to define the computational work of the node.
 The node function is called each time a complete set of node inputs is received.
@@ -14,7 +16,7 @@ Returns:
   a mapping where the key represents the output port name and value contains the
   output data to send to the respective port.
 */
-type NodeFunc func(in map[string]interface{}, params map[string]interface{}) map[string]interface{}
+type NodeFunc func(in DataMap, params DataMap) DataMap
 
 /*
 Node represents a node in a computational graph. Each node of the graph can do
@@ -25,7 +27,7 @@ that represents constant settings (e.g. threshold value, model parameters, etc).
 type Node struct {
 	In     map[string]*Port
 	Out    map[string]*Port
-	Params map[string]interface{}
+	Params DataMap
 	fn     NodeFunc
 	quit   chan bool
 	stats  map[string]float64
@@ -49,7 +51,7 @@ func (n *Node) Start() *Node {
 			default:
 			}
 
-			inputs := make(map[string]interface{})
+			inputs := make(DataMap)
 			for k, p := range n.In {
 				select {
 				case inputs[k] = <-p.Data:
@@ -117,7 +119,7 @@ Construct a node.
 
 Example usage:
 
-    fn := func(in map[string]interface{}, params map[string]interface{}) map[string]interface{} {
+    fn := func(in DataMap, params DataMap) DataMap {
 	// These would need to fetch synchronously since function computation depends on these values
 	bytes1 := in["img1"].([]byte)
 	bytes2 := in["img2"].([]byte)
@@ -125,7 +127,7 @@ Example usage:
 	result1 := ... // some computation here
 	result2 := ... // some computation here
 
-	return map[string]interface{} {
+	return DataMap {
 	    "diff": result1,
 	    "mask": result2,
 	}
@@ -147,7 +149,7 @@ func CreateNode(in []string, out []string, fn NodeFunc) *Node {
 	return &Node{
 		In:     inputPorts,
 		Out:    outputPorts,
-		Params: make(map[string]interface{}),
+		Params: make(DataMap),
 		fn:     fn,
 		quit:   make(chan bool),
 		stats:  make(map[string]float64),
